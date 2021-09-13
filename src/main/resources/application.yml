@@ -20,6 +20,9 @@ spring:
     testOnReturn: false
     filters: stat,wall,log4j
     logSlowSql: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
@@ -27,13 +30,16 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: ProducerGroup
+    max-message-size: 131072
+    send-message-timeout: 3000
+
 monitor:
   database:
     canal:
       enable: true
       home: D:\Environment\canal.deployer-1.1.5
 
-rocketmq:
-  name-server: 127.0.0.1:9876
-  producer:
-    group: my-producer-group
