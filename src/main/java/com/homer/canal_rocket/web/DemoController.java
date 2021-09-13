@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,13 +40,13 @@ public class DemoController {
     return userService.getUser(id);
   }
 
-  @GetMapping("/get/user/{id}")
-  public void getUserJSON(@PathVariable Integer id, HttpServletRequest request, HttpServletResponse response) {
+  @GetMapping("/json/user/{id}")
+  public void getUserJSON(@PathVariable Integer id, HttpServletResponse response) {
     User user = userService.getUserJson(id);
     String jsonString = JSONObject.toJSONString(user);
     try {
       PrintWriter writer = response.getWriter();
-      writer.println(jsonString);
+      writer.println(jsonString + "json");
     } catch (IOException e) {
       log.error(e.getMessage());
     }

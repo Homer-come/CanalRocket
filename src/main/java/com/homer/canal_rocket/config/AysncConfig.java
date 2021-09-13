@@ -1,6 +1,7 @@
 package com.homer.canal_rocket.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ public class AysncConfig implements AsyncConfigurer {
   public Executor getAsyncExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
     executor.setCorePoolSize(4);
-    executor.setMaxPoolSize(10);
+    executor.setMaxPoolSize(8);
     executor.setQueueCapacity(500);
     executor.setKeepAliveSeconds(60);
     executor.setThreadNamePrefix("Async-Homer-");
@@ -42,17 +43,20 @@ public class AysncConfig implements AsyncConfigurer {
   @Override
   public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
     return (throwable, method, objects) -> {
-//      String msg = StringUtils.EMPTY;
-//      if (ArrayUtils.isNotEmpty(objects) && objects.length > 0) {
-//        msg = StringUtils.join(msg, "参数是：");
-//        for (int i = 0; i < objects.length; i++) {
-//          msg = StringUtils.join(msg, objects[i], CharacterUtils.ENTER);
-//        }
-//      }
-//      if (Objects.nonNull(throwable)) {
-//        msg = StringUtils.join(msg, PrintExceptionInfo.printErrorInfo(throwable));
-//      }
-      log.error(throwable.getMessage());
+      String msg = StringUtils.EMPTY;
+      if (ArrayUtils.isNotEmpty(objects) && objects.length > 0) {
+        msg = StringUtils.join(msg, "参数是：");
+        for (int i = 0; i < objects.length; i++) {
+          msg = StringUtils.join(msg, objects[i]);
+        }
+      }
+      if (Objects.nonNull(method)) {
+        msg = StringUtils.join(msg, "方法为：" + method.getName());
+      }
+      if (Objects.nonNull(throwable)) {
+        msg = StringUtils.join(msg, "错误信息为：" + throwable.getMessage());
+      }
+      log.error(msg);
     };
   }
 }

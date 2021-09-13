@@ -33,7 +33,7 @@ public class UserService {
 
   @Async
   public void testMemory(Integer id) {
-    log.info(Thread.currentThread().getName() + id);
+    log.info(Thread.currentThread().getName());
     int i = 10 / 0;
   }
 }
