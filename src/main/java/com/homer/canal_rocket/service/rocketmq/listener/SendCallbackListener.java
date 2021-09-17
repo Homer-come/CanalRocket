@@ -13,6 +13,7 @@ import org.apache.rocketmq.client.producer.SendResult;
 
 /**
  * rocketmq异步回调监听
+ * @author homer
  */
 @Slf4j
 public class SendCallbackListener implements SendCallback {

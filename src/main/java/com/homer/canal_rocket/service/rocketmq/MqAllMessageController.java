@@ -154,7 +154,8 @@ public class MqAllMessageController {
           }
         });
         // 设置发送地和消息信息并发送消息（Orderly）
-        rocketMQTemplate.syncSendOrderly(syncTag, message, orderStep.getId());
+        SendResult sendResult = rocketMQTemplate.syncSendOrderly(syncTag, message, orderStep.getId());
+        log.info(sendResult.toString());
       }
     }
     log.info("pushSequeueMessage finish : " + id);
@@ -179,7 +180,7 @@ public class MqAllMessageController {
     // 超时时针对请求broker然后结果返回给product的耗时
     // 现在RocketMq并不支持任意时间的延时，需要设置几个固定的延时等级，从1s到2h分别对应着等级1到18
     // private String messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
-    SendResult sendResult = rocketMQTemplate.syncSend(syncTag, message, 1 * 1000l, 4);
+    SendResult sendResult = rocketMQTemplate.syncSend(syncTag, message, 1 * 1000L, 4);
     log.info("pushDelayMessage finish : " + id + ", sendResult : " + JSONObject.toJSONString(sendResult));
     // 解析发送结果
     if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
@@ -199,7 +200,7 @@ public class MqAllMessageController {
     log.info("pushBatchMessage start : " + id);
     // 创建消息集合
     List<Message> messages = new ArrayList<>();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 10; i++) {
       String myId = id + "" + i;
       // 处理当前订单唯一标识
       String messageStr = "order id : " + myId;
